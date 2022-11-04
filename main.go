@@ -93,13 +93,10 @@ func main() {
 
 	for index, email := range emails {
 		// create mail content
-		mailContent, err := PrepareEmailContent(dir, email, mailSubject)
+		mailContent, err := PrepareEmailContent(dir, mailSubject, email)
 		if err != nil {
-			// remove email from emails array
-			if index < emailsLength-1 {
-				// add email to failed queue
-				failedQueue = append(failedQueue, email)
-			}
+			// add email to failed queue
+			failedQueue = append(failedQueue, email)
 
 			// log error
 			log.Println((index + 1), " - ERROR: ", email, " ", err)
@@ -109,11 +106,9 @@ func main() {
 		// send email
 		err = SendEmailViaSmtp(config, mailContent)
 		if err != nil {
-			// remove email from emails list
-			if index < emailsLength-1 {
-				// add email to failed queue
-				failedQueue = append(failedQueue, email)
-			}
+			// add email to failed queue
+			failedQueue = append(failedQueue, email)
+
 			// log error
 			log.Println((index + 1), " - ERROR: ", email, " ", err)
 			continue
@@ -159,10 +154,10 @@ func main() {
 		log.Fatalln("error while writing emails list to json file: ", err)
 	}
 
+	// log total email
+	log.Println("TOTAL FOUND: ", emailsLength)
 	// log success
 	log.Println("SUCCESS: ", len(successQueue))
 	// log failed
 	log.Println("FAILED: ", len(failedQueue))
-	// log remaining
-	log.Println("REMAINING: ", len(emails))
 }
