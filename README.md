@@ -15,6 +15,7 @@ mailSubject := getEnvOrFatal("MAIL_SUBJECT")
 #### How to run  
 
 ```bash
-go build -o send-mail .
-./send-mail test.xlsx
+cp ./templates/email.html.sample ./templates/email.html # copy email sample
+go build -o send-mail . # build
+./send-mail test.xlsx # run
 ```
